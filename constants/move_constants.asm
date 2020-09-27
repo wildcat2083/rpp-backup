@@ -200,7 +200,7 @@ const_value = 1
 	const SUCKER_PUNCH ; c6
 	const SHADOW_BALL  ; c7
 	const FLAME_WHEEL  ; c8
-	const MOONLIGHT    ; c9
+	const HEALINGLIGHT ; c9
 	const HEX          ; ca
 	const SHADOW_PUNCH ; cb
 	const AERIAL_ACE   ; cc
@@ -242,7 +242,7 @@ const_value = 1
 	const ROCK_POLISH  ; f0
 	const ROCK_TOMB    ; f1
 	const DYNAMICPUNCH ; f2
-	const CIRCLE_THROW ; f3
+	const STORM_THROW  ; f3
 	const CROSS_CHOP   ; f4
 	const LOW_SWEEP    ; f5
 	const HURRICANE    ; f6
@@ -251,8 +251,8 @@ const_value = 1
 	const AEROBLAST    ; f9
 	const ANCIENTPOWER ; fa
 	const DIVE         ; fb (Unused) 
-    const LUSTER_PURGE ; fc
-    const PSYSTRIKE    ; fd
+	const LUSTER_PURGE ; fc
+	const MIND_BLAST   ; fd
 
 NUM_ATTACKS EQU const_value
 const_value = STRUGGLE + 1

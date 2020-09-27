@@ -68,6 +68,7 @@ AlwaysHappenSideEffects:
 	db HYPER_BEAM_EFFECT
 	db ATTACK_TWICE_EFFECT
 	db RECOIL_EFFECT
+	db VOLT_TACKLE_EFFECT
 	db TWINEEDLE_EFFECT
 	db RAGE_EFFECT
 	db -1
@@ -80,7 +81,6 @@ SpecialEffects:
 	db DREAM_EATER_EFFECT
 	db PAY_DAY_EFFECT
 	db SWIFT_EFFECT
-	db SUCKER_PUNCH_EFFECT
 	db TWO_TO_FIVE_ATTACKS_EFFECT
 	db $1E
 	db CHARGE_EFFECT
@@ -90,6 +90,7 @@ SpecialEffects:
 	db ATTACK_TWICE_EFFECT
 	db JUMP_KICK_EFFECT
 	db RECOIL_EFFECT
+	db VOLT_TACKLE_EFFECT
 	; fallthrough to Next EffectsArray
 SpecialEffectsCont:
 ; damaging moves whose effect is executed prior to damage calculation
@@ -4104,15 +4105,15 @@ CheckForDisobedience:
 	ld a, 101
 	jr nz, .next
 	bit 5, [hl]
-	ld a, 70
+	ld a, 80
 	jr nz, .next
 	bit 3, [hl]
-	ld a, 50
+	ld a, 60
 	jr nz, .next
 	bit 1, [hl]
-	ld a, 30
+	ld a, 40
 	jr nz, .next
-	ld a, 10
+	ld a, 20
 .next
 	ld b, a
 	ld c, a
@@ -4308,17 +4309,29 @@ GetDamageVarsForPlayerAttack:
 	and a ; check for critical hit
 	jr z, .scaleStats
 ; in the case of a critical hit, reset the player's attack and the enemy's defense to their base values
+; only revert player stat if you have lowered stats
+; only revert opponent stat if they have boosted stats
+	; does the opponent have lowered def?
+	ld a, [wEnemyMonDefenseMod]
+	cp 7 ; neutral
+	jr c, .dontNegateDefense
 	ld c, 3 ; defense stat
 	call GetEnemyMonStat
 	ld a, [H_PRODUCT + 2]
 	ld b, a
 	ld a, [H_PRODUCT + 3]
 	ld c, a
+.dontNegateDefense
 	push bc
+	; does the player have boosted attack?
+	ld a, [wPlayerMonAttackMod]
+	cp 7 ; neutral
+	jr nc, .dontNegateAttack
 	ld hl, wPartyMon1Attack
 	ld a, [wPlayerMonNumber]
 	ld bc, wPartyMon2 - wPartyMon1
 	call AddNTimes
+.dontNegateAttack
 	pop bc
 	jr .scaleStats
 .specialAttack
@@ -4341,17 +4354,29 @@ GetDamageVarsForPlayerAttack:
 	and a ; check for critical hit
 	jr z, .scaleStats
 ; in the case of a critical hit, reset the player's and enemy's specials to their base values
+; only revert player stat if you have lowered stats
+; only revert opponent stat if they have boosted stats
+	; does the enemy have lowered special?
+	ld a, [wEnemyMonSpecialMod]
+	cp 7 ; neutral
+	jr c, .dontNegateSpecial1
 	ld c, 5 ; special stat
 	call GetEnemyMonStat
 	ld a, [H_PRODUCT + 2]
 	ld b, a
 	ld a, [H_PRODUCT + 3]
 	ld c, a
+.dontNegateSpecial1
 	push bc
+	; does the player have boosted special?
+	ld a, [wPlayerMonSpecialMod]
+	cp 7 ; neutral
+	jr nc, .dontNegateSpecial2
 	ld hl, wPartyMon1Special
 	ld a, [wPlayerMonNumber]
 	ld bc, wPartyMon2 - wPartyMon1
 	call AddNTimes
+.dontNegateSpecial2
 	pop bc
 ; if either the offensive or defensive stat is too large to store in a byte, scale both stats by dividing them by 4
 ; this allows values with up to 10 bits (values up to 1023) to be handled
@@ -4438,6 +4463,13 @@ GetDamageVarsForEnemyAttack:
 	and a ; check for critical hit
 	jr z, .scaleStats
 ; in the case of a critical hit, reset the player's defense and the enemy's attack to their base values
+; only revert player stat if you have boosted stats
+; only revert opponent if they have lowered stats
+	; does the player have lowered def?
+	ld a, [wPlayerMonDefenseMod]
+	cp 7 ; neutral
+	jr c, .dontNegateDefense
+	push hl
 	ld hl, wPartyMon1Defense
 	ld a, [wPlayerMonNumber]
 	ld bc, wPartyMon2 - wPartyMon1
@@ -4445,10 +4477,17 @@ GetDamageVarsForEnemyAttack:
 	ld a, [hli]
 	ld b, a
 	ld c, [hl]
+	pop hl
+.dontNegateDefense
 	push bc
+	; does the opponent have boosted attack?
+	ld a, [wEnemyMonAttackMod]
+	cp 7 ; neutral
+	jr nc, .dontNegateAttack
 	ld c, 2 ; attack stat
 	call GetEnemyMonStat
 	ld hl, H_PRODUCT + 2
+.dontNegateAttack
 	pop bc
 	jr .scaleStats
 .specialAttack
@@ -4471,6 +4510,13 @@ GetDamageVarsForEnemyAttack:
 	and a ; check for critical hit
 	jr z, .scaleStats
 ; in the case of a critical hit, reset the player's and enemy's specials to their base values
+; only revert player stat if you have boosted stats
+; only revert opponent if they have lowered stats
+	; does the player have lowered special?
+	ld a, [wPlayerMonSpecialMod]
+	cp 7 ; neutral
+	jr c, .dontNegateSpecial1
+	push hl
 	ld hl, wPartyMon1Special
 	ld a, [wPlayerMonNumber]
 	ld bc, wPartyMon2 - wPartyMon1
@@ -4478,10 +4524,17 @@ GetDamageVarsForEnemyAttack:
 	ld a, [hli]
 	ld b, a
 	ld c, [hl]
+	pop hl
+.dontNegateSpecial1
 	push bc
+	; does the opponent have boosted special?
+	ld a, [wEnemyMonSpecialMod]
+	cp 7 ; neutral
+	jr nc, .dontNegateSpecial2
 	ld c, 5 ; special stat
 	call GetEnemyMonStat
 	ld hl, H_PRODUCT + 2
+.dontNegateSpecial2
 	pop bc
 ; if either the offensive or defensive stat is too large to store in a byte, scale both stats by dividing them by 4
 ; this allows values with up to 10 bits (values up to 1023) to be handled
@@ -4525,6 +4578,7 @@ GetDamageVarsForEnemyAttack:
 ; get stat c of enemy mon
 ; c: stat to get (HP=1,Attack=2,Defense=3,Speed=4,Special=5)
 GetEnemyMonStat:
+	push hl
 	push de
 	push bc
 	ld a, [wLinkState]
@@ -4544,6 +4598,7 @@ GetEnemyMonStat:
 	ld [H_MULTIPLICAND + 2], a
 	pop bc
 	pop de
+	pop hl
 	ret
 .notLinkBattle
 	ld a, [wEnemyMonLevel]
@@ -4563,6 +4618,7 @@ GetEnemyMonStat:
 	ld hl, wLoadedMonSpeedExp - $b ; this base address makes CalcStat look in [wLoadedMonSpeedExp] for DVs
 	call CalcStat
 	pop de
+	pop hl
 	ret
 
 CalculateDamage:
@@ -4764,11 +4820,18 @@ CriticalHitTest:
 .EnemyTurn
 	ld a, [wEnemySelectedMove]
 	ld b, a
-	jr .loop
+	jr .checkAlwaysCrit
 .PlayersTurn
 	ld a, [wPlayerSelectedMove]
 	ld b,a
+.checkAlwaysCrit
+; first, check moves that always crit
+	cp STORM_THROW
+	jr z, .CritSuccess
+	cp MIND_BLAST
+	jr z, .CritSuccess
 .loop
+; if it wasn't one of those, loop over the list of high-crit moves
 	ld a, [hli]
 	cp b
 	jr z, .HighCritical
@@ -4792,6 +4855,7 @@ CriticalHitTest:
 	call BattleRandom
 	cp [hl]
 	ret nc
+.CritSuccess
 	ld a,1
 	ld [wCriticalHitOrOHKO],a ; Critical Hit Flag
 	ret
@@ -5165,6 +5229,8 @@ AttackSubstitute:
 	jr z, .done
 	cp RECOIL_EFFECT
 	jr z, .done
+	cp VOLT_TACKLE_EFFECT
+	jr z, .done
 	; if it wasn't one of those, nullify the effect
 	xor a
 	ld [hl],a ; zero the effect of the attacker's move
@@ -5532,12 +5598,6 @@ MoveHitTest:
 .checkForDigOrFlyStatus
 	bit Invulnerable,[hl]
 	jp nz,.moveMissed
-.suckerPunchCheck
-	ld a,[de]
-	cp a,SUCKER_PUNCH_EFFECT
-	jr nz,.swiftCheck
-	call SuckerPunchHitTest
-	jp c,.moveMissed
 .swiftCheck
 	ld a,[de]
 	cp a,SWIFT_EFFECT
@@ -6792,6 +6852,11 @@ CalculateModifiedStat:
 	ret
 
 ApplyBadgeStatBoosts:
+IF DEF (_HARD)
+	; Hard Mode does not have Badges boost your stats
+	ret
+ELSE
+	; Normal Mode keeps this in place
 	ld a, [wLinkState]
 	cp LINK_STATE_BATTLING
 	ret z ; return if link battle
@@ -6843,6 +6908,7 @@ ApplyBadgeStatBoosts:
 	ld a, 999 % $100
 	ld [hld], a
 	ret
+ENDC
 
 LoadHudAndHpBarAndStatusTilePatterns:
 	call LoadHpBarAndStatusTilePatterns
@@ -7370,9 +7436,14 @@ MoveEffectPointerTable:
 	 dw FangAttacks               ; THUNDER_FANG_EFFECT
 	 dw VoltTackleEffect          ; VOLT_TACKLE_EFFECT
 	 dw PoisonEffect              ; POISON_FANG_EFFECT
-	 dw $0000                     ; SUCKER_PUNCH_EFFECT
 	 dw GrowthEffect              ; GROWTH_EFFECT
 	 dw HoneClawsEffect           ; HONE_CLAWS_EFFECT
+	 dw DynamicPunchEffect        ; DYNAMIC_PUNCH_EFFECT
+	 dw SilverWindEffect          ; SILVER_WIND_EFFECT
+	 dw AttackUpSideEffect        ; ATTACK_UP1_SIDE_EFFECT
+	 dw AttackUpSideEffect2       ; ATTACK_UP1_SIDE_EFFECT2
+	 dw DefenseUpSideEffect       ; DEFENSE_UP1_SIDE_EFFECT
+	 dw TriAttackEffect           ; TRI_ATTACK_EFFECT
 
 SleepEffect:
 	ld de, wEnemyMonStatus
@@ -7548,6 +7619,26 @@ ExplodeEffect:
 	res Seeded, a ; clear mon's leech seed status
 	ld [de], a
 	ret
+
+TriAttackEffect:
+	ld b, BURN_SIDE_EFFECT1
+	ld a, [hRandomSub] ; grab a random number
+	cp 85 ; 85 / 256 chance = 33%
+	jr c, .gotStatusEffect
+	inc b ; FREEZE_SIDE_EFFECT
+	cp 170 ; (170-85) / 256 chance = 33%
+	jr c, .gotStatusEffect
+	inc b ; PARALYZE_SIDE_EFFECT1 ; remaining 33%
+.gotStatusEffect
+	ld a, [H_WHOSETURN] ; check if it is the player's turn or the opponent's
+	and a
+	ld a, b ; get the effect we chose earlier
+	jr nz, .opponent
+	ld [wPlayerMoveEffect], a ; store it as the player's move effect if player's turn
+	jr FreezeBurnParalyzeEffect
+.opponent
+	ld [wEnemyMoveEffect], a ; store it as the enemy's move effect if enemy's turn
+; fallthrough to FreezeBurnParalyzeEffect
 
 FreezeBurnParalyzeEffect:
 	xor a
@@ -8528,6 +8619,7 @@ ConfusionEffect:
 	and a
 	jr nz, ConfusionEffectFailed
 
+DynamicPunchEffect:
 ConfusionSideEffectSuccess:
 	ld a, [H_WHOSETURN]
 	and a
@@ -8909,6 +9001,46 @@ VoltTackleEffect:
 	call RecoilEffect
 	jp FreezeBurnParalyzeEffect
 
+SilverWindEffect:
+; 10% chance to boost all stats
+	call BattleRandom
+	cp $1a
+	ret nc
+	
+	ld a, [H_WHOSETURN]
+	and a
+	jr z, .notEnemyTurn
+; Enemy's turn
+	xor a
+	ld [wEnemyMoveNum], a
+	ld a, ATTACK_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	call StatModifierUpEffect
+	ld a, DEFENSE_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	call StatModifierUpEffect
+	ld a, SPEED_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	call StatModifierUpEffect
+	ld a, SPECIAL_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	jp StatModifierUpEffect
+.notEnemyTurn
+	xor a
+	ld [wPlayerMoveNum], a
+	ld a, ATTACK_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	call StatModifierUpEffect
+	ld a, DEFENSE_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	call StatModifierUpEffect
+	ld a, SPEED_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	call StatModifierUpEffect
+	ld a, SPECIAL_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	jp StatModifierUpEffect
+
 GrowthEffect:
 	ld a, [H_WHOSETURN]
 	and a
@@ -8917,6 +9049,8 @@ GrowthEffect:
 	ld a, SPECIAL_UP1_EFFECT
 	ld [wEnemyMoveEffect], a
 	call StatModifierUpEffect
+	xor a
+	ld [wEnemyMoveNum], a
 	ld a, ATTACK_UP1_EFFECT
 	ld [wEnemyMoveEffect], a
 	jp StatModifierUpEffect
@@ -8924,6 +9058,8 @@ GrowthEffect:
 	ld a, SPECIAL_UP1_EFFECT
 	ld [wPlayerMoveEffect], a
 	call StatModifierUpEffect
+	xor a
+	ld [wPlayerMoveNum], a
 	ld a, ATTACK_UP1_EFFECT
 	ld [wPlayerMoveEffect], a
 	jp StatModifierUpEffect
@@ -8936,6 +9072,8 @@ HoneClawsEffect:
 	ld a, ATTACK_UP1_EFFECT
 	ld [wEnemyMoveEffect], a
 	call StatModifierUpEffect
+	xor a
+	ld [wEnemyMoveNum], a
 	ld a, ACCURACY_UP1_EFFECT
 	ld [wEnemyMoveEffect], a
 	jp StatModifierUpEffect
@@ -8943,41 +9081,66 @@ HoneClawsEffect:
 	ld a, ATTACK_UP1_EFFECT
 	ld [wPlayerMoveEffect], a
 	call StatModifierUpEffect
+	xor a
+	ld [wPlayerMoveNum], a
 	ld a, ACCURACY_UP1_EFFECT
 	ld [wPlayerMoveEffect], a
 	jp StatModifierUpEffect
 
-SuckerPunchHitTest:
-; Sets carry flag if the move should miss. (Resets carry flag otherwise.)
-; Move fails if it didn't go first.
+AttackUpSideEffect2:
+; 20% chance to boost stat
+	call BattleRandom
+	cp $34
+	ret nc
+	jr AttackUpSideEffectSuccess
+
+AttackUpSideEffect:
+; 10% chance to boost stat
+	call BattleRandom
+	cp $1a
+	ret nc
+	; fallthrough
+
+AttackUpSideEffectSuccess:
 	ld a, [H_WHOSETURN]
 	and a
-	ld a, [wEnemyWentFirst]
-	jr z, .playerTurn
-	and a
-	jr z, .moveMissed
-.playerTurn
-	and a
-	jr nz, .moveMissed
-.checkOpposingMove
-; Fails if the opponent is using a non-damaging move.
+	jr z, .notEnemyTurn
+; Enemy's turn
+	xor a
+	ld [wEnemyMoveNum], a
+	ld a, ATTACK_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	jp StatModifierUpEffect
+.notEnemyTurn
+	xor a
+	ld [wPlayerMoveNum], a
+	ld a, ATTACK_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	jp StatModifierUpEffect
+
+DefenseUpSideEffect:
+; 10% chance to boost stat
+	call BattleRandom
+	cp $1a
+	ret nc
+	; fallthrough
+
+DefenseUpSideEffectSuccess:
 	ld a, [H_WHOSETURN]
 	and a
-	jr z, .getEnemyMove
-	ld a, [wPlayerSelectedMove]
-	jr .checkIfDamagingMove
-.getEnemyMove
-	ld a, [wEnemySelectedMove]
-.checkIfDamagingMove
-	call PhysicalSpecialSplit
-	cp OTHER_M ; non-damaging or status move
-	jr z, .moveMissed
-.moveHit
-	and a  ; reset carry flag
-	ret
-.moveMissed
-	scf
-	ret
+	jr z, .notEnemyTurn
+; Enemy's turn
+	xor a
+	ld [wEnemyMoveNum], a
+	ld a, DEFENSE_UP1_EFFECT
+	ld [wEnemyMoveEffect], a
+	jp StatModifierUpEffect
+.notEnemyTurn
+	xor a
+	ld [wPlayerMoveNum], a
+	ld a, DEFENSE_UP1_EFFECT
+	ld [wPlayerMoveEffect], a
+	jp StatModifierUpEffect
 
 CheckForHex:
 	ld a, [H_WHOSETURN]

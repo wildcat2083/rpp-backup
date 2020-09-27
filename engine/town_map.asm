@@ -312,7 +312,7 @@ LoadTownMap:
 	ld de, vSprites + $40
 	ld bc, MonNestIconEnd - MonNestIcon
 	ld a, BANK(MonNestIcon)
-	call FarCopyDataDouble
+	call FarCopyData2
 	
 	ld hl, UncompressedMap
 	ld de, wTileMap
@@ -450,6 +450,40 @@ WriteTownMapSpriteOAM:
 	ld b, h
 	ld c, l
 	pop hl
+	lb de, 2, 2
+.loop
+	push de
+	push bc
+.innerLoop
+	ld a, b
+	ld [hli], a
+	ld a, c
+	ld [hli], a
+	ld a, [wOAMBaseTile]
+	ld [hli], a
+	inc a
+	ld [wOAMBaseTile], a
+	ld a, [wPlayerGender]
+	and a ; Are you a boy? Or a girl?
+	ld a, PAL_OW_GREEN
+	jr nz, .gotPal
+	xor a ; ld a, PAL_OW_RED
+.gotPal
+	ld [hli], a
+	inc d
+	ld a, 8
+	add c
+	ld c, a
+	dec e
+	jr nz, .innerLoop
+	pop bc
+	pop de
+	ld a, 8
+	add b
+	ld b, a
+	dec d
+	jr nz, .loop
+	ret
 
 WriteAsymmetricMonPartySpriteOAM:
 ; Writes 4 OAM blocks for a helix mon party sprite, since it does not have
@@ -588,7 +622,7 @@ INCLUDE "data/town_map_entries.asm"
 INCLUDE "text/map_names.asm"
 
 MonNestIcon:
-	INCBIN "gfx/mon_nest_icon.1bpp"
+	INCBIN "gfx/mon_nest_icon.2bpp"
 MonNestIconEnd:
 
 TownMapSpriteBlinkingAnimation:

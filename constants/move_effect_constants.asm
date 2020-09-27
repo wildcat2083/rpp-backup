@@ -96,9 +96,14 @@ const_value = 0
 	const THUNDER_FANG_EFFECT        ; $59
 	const VOLT_TACKLE_EFFECT         ; $5A
 	const POISON_FANG_EFFECT         ; $5B
-	const SUCKER_PUNCH_EFFECT        ; $5C
-	const GROWTH_EFFECT              ; $5D
-	const HONE_CLAWS_EFFECT          ; $5E
+	const GROWTH_EFFECT              ; $5C
+	const HONE_CLAWS_EFFECT          ; $5D
+	const DYNAMIC_PUNCH_EFFECT       ; $5E
+	const SILVER_WIND_EFFECT         ; $5F
+	const ATTACK_UP1_SIDE_EFFECT     ; $60: 10% chance to raise attack 1 stage
+	const ATTACK_UP1_SIDE_EFFECT2    ; $61: 20% chance to raise attack 1 stage
+	const DEFENSE_UP1_SIDE_EFFECT    ; $62: 10% chance to raise defense 1 stage
+	const TRI_ATTACK_EFFECT          ; Randomly burn, freeze, or paralyze the opponent
 
 ; fixed damage constants
 SONICBOOM_DAMAGE   EQU 20

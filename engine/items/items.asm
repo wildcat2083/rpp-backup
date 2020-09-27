@@ -685,11 +685,23 @@ ItemUseBicycle:
 	jp z,ItemUseNotTime
 	dec a ; is player already bicycling?
 	jr nz,.tryToGetOnBike
-.getOffBike
+.tryToGetOffBike
 	call ItemUseReloadOverworldData
+	ld a,[wPseudoItemID]
+	and a ; if not using select shortcut
+	jr z,.getOffBike
+	; check cycling road
+	ld a,[wd732]
+	bit 5,a
+	jr z,.getOffBike ; if not on cycling road, get off bike
+	jr .printCannotGetOffText
+.getOffBike
 	xor a
 	ld [wWalkBikeSurfState],a ; change player state to walking
 	call PlayDefaultMusic ; play walking music
+	ld a,[wPseudoItemID]
+	and a ; if using select shortcut
+	ret nz
 	ld hl,GotOffBicycleText
 	jr .printText
 .tryToGetOnBike
@@ -700,10 +712,20 @@ ItemUseBicycle:
 	ld [hJoyHeld],a ; current joypad state
 	inc a
 	ld [wWalkBikeSurfState],a ; change player state to bicycling
-	ld hl,GotOnBicycleText
 	call PlayDefaultMusic ; play bike riding music
+	ld a,[wPseudoItemID]
+	and a ; if using select shortcut
+	ret nz
+	ld hl,GotOnBicycleText
 .printText
 	jp PrintText
+.printCannotGetOffText
+	ld hl,CannotGetOffBicycleText
+	jp PrintText
+
+CannotGetOffBicycleText:
+	TX_FAR _CannotGetOffHereText
+	db "@"
 
 ; used for Surf out-of-battle effect
 ItemUseSurfboard:
@@ -2111,6 +2133,8 @@ ItemUseItemfinder:
 	and a
 	jp nz,ItemUseNotTime
 	call ItemUseReloadOverworldData
+	ld hl,ItemFinderUsedText
+	call PrintText
 	callba HiddenItemNear ; check for hidden items
 	ld hl,ItemfinderFoundNothingText
 	jr nc,.printText ; if no hidden items
@@ -2125,6 +2149,11 @@ ItemUseItemfinder:
 	ld hl,ItemfinderFoundItemText
 .printText
 	jp PrintText
+
+ItemFinderUsedText:
+	text "[PLAYER] used the"
+	line "ItemFinder!"
+	prompt
 
 ItemfinderFoundItemText:
 	TX_FAR _ItemfinderFoundItemText
@@ -2430,13 +2459,7 @@ ItemUseTMHM:
 	ld [wcf91],a
 	pop af
 	ld [wWhichPokemon],a
-	ld a,b
-	and a
-	ret z
-	ld a,[wcf91]
-	call IsItemHM
-	ret c
-	jp RemoveUsedItem
+	ret
 
 BootedUpTMText:
 	TX_FAR _BootedUpTMText

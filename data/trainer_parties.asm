@@ -280,7 +280,7 @@ AgathaData:
 	moveset POWER_GEM, SHADOW_BALL, HEX, PSYBEAM
 	
 	db 56,HONCHKROW
-	moveset NIGHT_SLASH, HEX, MOONLIGHT, ACROBATICS
+	moveset NIGHT_SLASH, HEX, HEALINGLIGHT, ACROBATICS
 	
 	db 55,HOUNDOOM
 	moveset FLAMETHROWER, SHADOW_BALL, HEX, BITE
@@ -289,7 +289,7 @@ AgathaData:
 	moveset DARK_PULSE, NIGHT_SHADE, HEX, GLARE
 	
 	db 60,GENGAR
-	moveset HYPNOSIS, DREAM_EATER, HEX, MOONLIGHT
+	moveset HYPNOSIS, DREAM_EATER, HEX, HEALINGLIGHT
 	db $FF
 	
 LanceData:
@@ -713,7 +713,7 @@ Green3Data:
 	db $FF
 	
 YoungsterData:
-	db "Joey@",11,RATTATA,EKANS,$FF
+	db "Ben@",11,ZIGZAGOON,RATTATA,$FF
 	db "Arnold@",14,SPEAROW,$FF
 	db "Anthony@",10,RATTATA,RATTATA,ZUBAT,$FF
 	db "Samuel@",14,RATTATA,EKANS,ZUBAT,$FF
@@ -723,7 +723,7 @@ YoungsterData:
 	db "Chad@",21,NIDORAN_M,$FF
 	db "Dan@",21,EKANS,$FF
 	db "Dave@",19,SANDSHREW,ZUBAT,$FF
-	db "Josh@",17,RATTATA,RATTATA,RATICATE,$FF
+	db "Josh@",17,ZIGZAGOON,ZIGZAGOON,LINOONE,$FF
 	db "Timmy@",18,NIDORAN_M,NIDORINO,$FF
 	db "Nash@",17,SPEAROW,RATTATA,RATTATA,SPEAROW,$FF
 	
@@ -745,7 +745,7 @@ BugCatcherData:
 	
 LassData:
 	db "Nicole@",9,PIDGEY,PIDGEY,$FF
-	db "Jennifer@",10,RATTATA,NIDORAN_M,$FF
+	db "Jennifer@",10,ZIGZAGOON,NIDORAN_M,$FF
 	db "Hillary@",14,JIGGLYPUFF,$FF
 	db "Rachel@",31,PARAS,PARAS,PARASECT,$FF
 	db "Christy@",11,ODDISH,BELLSPROUT,$FF
@@ -783,7 +783,7 @@ CamperData:
 	db "Nick@",21,GROWLITHE,HOUNDOUR,$FF
 	db "Robert@",19,RATTATA,DIGLETT,EKANS,SANDSHREW,$FF
 	db "Ian@",29,NIDORAN_M,NIDORINO,$FF
-	db "Flint@",14,RATTATA,EKANS,$FF
+	db "Flint@",14,ZIGZAGOON,EKANS,$FF
 	
 PicnickerData:
 	db "Cindy@",19,GOLDEEN,$FF
@@ -1063,7 +1063,18 @@ ScientistData:
 	
 RocketFData:
 RocketData:
-	db "Executive@",CUSTOM_PIC,EXECUTIVE_F,15,RATTATA,MURKROW,$FF
+	db "Executive@"
+	db SPECIAL_TRAINER2
+	db EXECUTIVE_F
+	db AI_POTION
+	
+	db 15,RATTATA
+	moveset BITE, QUICK_ATTACK, FOCUS_ENERGY, IRON_TAIL
+	
+	db 16,MURKROW
+	moveset PECK, QUICK_ATTACK, WING_ATTACK, GROWL
+	db $FF
+
 	db "James@",CUSTOM_PIC,JAMES,13,KOFFING,$FF
 	db "Jessie@",CUSTOM_PIC,JESSIE,13,EKANS,$FF
 	db "Grunt@",14,RATICATE,$FF

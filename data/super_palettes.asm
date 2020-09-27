@@ -293,7 +293,7 @@ PokemonPaletteTable:
 	RGB 30, 04, 01
 
 ; PAL_PIDGEY
-	RGB 31, 21, 31
+	RGB 30, 27, 13
 	RGB 19, 08, 02
 
 ; PAL_PIDGEOTTO
@@ -1051,6 +1051,18 @@ PokemonPaletteTable:
 ; PAL_MUNCHLAX
 	RGB 27, 18, 14
 	RGB 04, 11, 14
+
+; PAL_ZIGZAGOON
+	RGB 23, 21, 08
+	RGB 18, 12, 04
+
+; PAL_LINOONE
+	RGB 28, 23, 12
+	RGB 18, 12, 04
+
+; PAL_HO_OH
+	RGB 31, 07, 03
+	RGB 07, 15, 03
 
 
 ShinyPokemonPaletteTable:
@@ -1875,6 +1887,19 @@ ShinyPokemonPaletteTable:
 	RGB 22, 22, 12
 	RGB 07, 15, 25
 
+; PAL_SHINY_ZIGZAGOON
+	RGB 24, 21, 17
+	RGB 24, 12, 08
+
+; PAL_SHINY_LINOONE
+	RGB 27, 26, 22
+	RGB 24, 12, 08
+
+; PAL_SHINY_HO_OH
+	RGB 25, 20, 00
+	RGB 31, 08, 04
+
+
 
 TrainerPaletteTable:
 
@@ -2112,7 +2137,7 @@ TrainerPaletteTable:
 
 ; PAL_PROF_OAK
 	RGB 24, 19, 11
-	RGB 13, 16, 00
+	RGB 10, 08, 14
 
 ; PAL_PI_TRAINER
 	RGB 25, 16, 12

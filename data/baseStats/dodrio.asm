@@ -2,7 +2,7 @@ db DEX_DODRIO ; pokedex id
 db 60 ; base hp
 db 110 ; base attack
 db 70 ; base defense
-db 100 ; base speed
+db 110 ; base speed
 db 60 ; base special
 db NORMAL ; species type 1
 db FLYING ; species type 2
@@ -18,7 +18,7 @@ dw DodrioPicBack
 	m_tutor 0
 db 0 ; growth rate
 ; learnset
-	tmlearn 4,5,6,8
+	tmlearn 3,4,5,6,8
 	tmlearn 9,10,15
 	tmlearn 0
 	tmlearn 31,32

@@ -1,12 +1,15 @@
-# Pokémon Red++
+# Pokémon Red++ v3
 
 This is based on the [**Pokémon Red Disassembly**][pokered]
 
 Red++ serves as an updated version of Pokémon Red.
 
 It fixes a lot of bugs leftover from original Red and Blue, as well as adding new features.
-It builds two versions, a "Normal" version and a "Hard" version. The only difference is the level curve.
-By default, it builds the Hard rom. To build the Normal rom, go to [constants.asm](constants.asm) and comment out the line it tells you to at the top.
+
+# You can download IPS patch files [**here**](patches/). Apply them to a normal Red Version rom. Just apply whichever patch you want.
+
+The source code builds two versions, a "Normal" version and a "Hard" version. The only difference is the level curve.
+"pokered.gbc" is the Normal version, "pokeblue.gbc" is the Hard version. There is also the option to build either version with snowy graphics.
 
 For a list of features, check out [**FEATURES.md**](FEATURES.md).
 
@@ -16,21 +19,21 @@ For a list of features, check out [**FEATURES.md**](FEATURES.md).
 * To see a list of Move Tutor moves, and where to find them, look [**here**](data/move_tutors.asm)
 * To see Pokémon base stats, which TMs and which Move Tutors they learn, look [**here**](data/baseStats/).
 * To see which Pokémon are found in the wild in each area, look [**here**](data/wildPokemon/).
+* To see a list of Pokémon you can find via Headbutting trees, look [**here**](data/wildPokemon/tree_mons.asm).
+* To see all the In-Game Trades and where they are found, look [**here**](data/trades.asm).
+
 
 
 ## Frequently Asked Questions
 
-### Q: How do you play this in color?
-A: If you build the current copy yourself, it is already in Full Color. For the current stable release (v2.4.2), however: In VBA, go to Options -> Gameboy and set it to "Automatic", then close and re-open the emulator for the change to take effect. If you're playing on a mobile emulator, chances are good that if it doesn't automatically play in color, your emulator doesn't support Super Gameboy mode, which this hack currently uses for color.
-
 ### Q: Are all Pokémon available?
-A: Yes, all 205 Pokémon that are included in the game are available without needing to trade with another person or abusing Wonder Trade.
+A: Yes, all 208 Pokémon that are included in the game are available without needing to trade with another person or abusing Wonder Trade.
 
 ### Q: Which Pokémon are in Wonder Trade?
 A: Every Pokémon that isn't legendary can appear in Wonder Trade, but you will only find Pokémon that can legally exist at the same level as the one you offered for the trade.
 
 ### Q: How do you get Dive?
-A: Dive is not available because the functionality hasn't been added yet.
+A: Dive is not available because the functionality hasn't been added yet. It will be in v4.
 
 ### Q: Where is the Move Deleter?
 A: The house between Fuchsia City's Gym and Pokémon Center.
@@ -45,7 +48,7 @@ A: The only "Event Shiny" for now is the Magikarp you buy in the Mt. Moon Pokéc
 A: Yes, Dark Steel and Fairy are all in, and type strengths/weaknesses match Gen 6.
 
 ### Q: Can I go to Johto?
-A: There is only Kanto for now. Johto is part of the ongoing copy of v3 in the main repo.
+A: There is only Kanto for now. Johto is part of the ongoing copy of v4 in the main repo.
 
 ### Q: Will you add so-and-so feature?
 A: Maybe!
@@ -66,24 +69,17 @@ After setting up the repository, you'll want to download the current release of 
 
 ## See also
 
-* Disassembly of [**Pokémon Yellow**][pokeyellow]
-* Disassembly of [**Pokémon Crystal**][pokecrystal]
-* Disassembly of [**Pokémon Pinball**][pokepinball]
-* Disassembly of [**Pokémon TCG**][poketcg]
-* Disassembly of [**Pokémon Ruby**][pokeruby]
-* Disassembly of [**Pokémon Emerald**][pokeemerald]
-* Discord: [**pret**][Discord]
-* irc: **irc.freenode.net** [**#pret**][irc]
+* [**Pokémon Red++ v4**][redplusplus] by Me.
+* [**Pokémon Polished Crystal**][polished] by Rangi.
+* [**Pokémon RedStar/BlueStar**][redstarbluestar] by Rangi.
+* [**Pokémon Orange**][orange] by Pia Carrot.
 
-[polished]: http://github.com/roukaour/polishedcrystal
-[polishedmap]: https://github.com/roukaour/polished-map
-[pokered]: http://github.com/pret/pokered
-[pokeyellow]: https://github.com/pret/pokeyellow
-[pokecrystal]: https://github.com/pret/pokecrystal
-[pokepinball]: https://github.com/pret/pokepinball
-[poketcg]: https://github.com/pret/poketcg
-[pokeruby]: https://github.com/pret/pokeruby
-[pokeemerald]: https://github.com/pret/pokeemerald
-[Discord]: https://discord.gg/cJxDDVP
-[irc]: https://kiwiirc.com/client/irc.freenode.net/?#pret
+
+
+[polished]: http://github.com/rangi42/polishedcrystal
+[polishedmap]: https://github.com/rangi42/polished-map
+[redplusplus]: https://github.com/TheFakeMateo/RedPlusPlus
+[redstarbluestar]: https://github.com/Rangi42/redstarbluestar
+[orange]: https://github.com/PiaCarrot/pokeorange
+[pokered]: https://github.com/pret/pokered
 [lunaverse]: https://discord.gg/SQwkd7r

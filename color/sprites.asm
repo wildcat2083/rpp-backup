@@ -1,29 +1,33 @@
 ; Handles sprite attributes
 
-ATK_PAL_GREY    EQU 0
-ATK_PAL_BLUE    EQU 1
-ATK_PAL_RED     EQU 2
-ATK_PAL_BROWN   EQU 3
-ATK_PAL_YELLOW  EQU 4
-ATK_PAL_GREEN   EQU 5
-ATK_PAL_ICE	EQU 6
-ATK_PAL_PURPLE	EQU 7
-; 8: color based on attack type
-; 9: don't change color palette (assume it's already set properly from elsewhere)
-
-
-PAL_OW_RED		EQU 0
-PAL_OW_BLUE		EQU 1
-PAL_OW_GREEN	EQU 2
-PAL_OW_BROWN	EQU 3
-PAL_OW_PURPLE	EQU 4
-PAL_OW_EMOJI	EQU 5
-PAL_OW_TREE		EQU 6
-PAL_OW_ROCK		EQU 7
-PAL_OW_RANDOM	EQU 8 ; pseudorandom
-
 LoadOverworldSpritePalettes:
+	ld a,[rSVBK]
+	ld b,a
+	xor a
+	ld [rSVBK],a
+	push bc
+
+	; Does the map we're on use dark/night palettes?
+	; Load the matching Object Pals if so
+	ld a, [wCurMapTileset]
+	ld hl,SpritePalettesNite
+	cp ICE_CAVERN
+	jr z, .gotPaletteList
+	cp CAVERN
+	jr z, .gotPaletteList
+	cp FOREST
+	jr z, .gotPaletteList
+	; If it is the Pokemon Center, load different pals for the Heal Machine to flash
+	ld hl,SpritePalettesPokecenter
+	cp POKECENTER
+	jr z, .gotPaletteList
+	; If not, load the normal Object Pals
 	ld hl,SpritePalettes
+.gotPaletteList
+	pop bc
+	ld a, b
+	ld [rSVBK], a
+	
 	jr LoadSpritePaletteData
 
 LoadAttackSpritePalettes:
@@ -66,6 +70,8 @@ ColorOverworldSprite:
 	ld d,wSpriteStateData1>>8
 	ld a,[de]		; Load A with picture ID
 	dec a
+	and a
+	jr z, .playerSprite
 
 	ld de, SpritePaletteAssignments
 	add e
@@ -74,7 +80,16 @@ ColorOverworldSprite:
 	inc d
 .noCarry
 	ld a,[de]		; Get the picture ID's palette
+	jr .continue
 
+.playerSprite
+	ld a, [wPlayerGender]
+	and a
+	ld a, PAL_OW_RED
+	jr z, .continue
+	ld a, PAL_OW_GREEN
+
+.continue
 	; If it's PAL_OW_RANDOM, that means no particular palette is assigned
 	cp PAL_OW_RANDOM
 	jr nz,.norandomColor
@@ -307,7 +322,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_RANDOM
 
 	; 0x09: SPRITE_BIRD
-	db PAL_OW_RED
+	db PAL_OW_BROWN
 
 	; 0x0a: SPRITE_FAT_BALD_GUY
 	db PAL_OW_RANDOM
@@ -355,7 +370,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_BROWN
 
 	; 0x19: SPRITE_MEDIUM
-	db PAL_OW_BROWN
+	db PAL_OW_BLUE
 
 	; 0x1a: SPRITE_WAITER
 	db PAL_OW_RANDOM
@@ -394,7 +409,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_RANDOM
 
 	; 0x26: SPRITE_MART_GUY
-	db PAL_OW_BLUE
+	db PAL_OW_GREEN
 
 	; 0x27: SPRITE_FISHER
 	db PAL_OW_RANDOM
@@ -526,7 +541,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_RED
 
 	; 0x51: SPRITE_OMANYTE
-	db PAL_OW_ROCK
+	db PAL_OW_BROWN
 
 	; 0x52: SPRITE_BOULDER
 	db PAL_OW_ROCK
@@ -535,7 +550,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_BROWN
 
 	; 0x54: SPRITE_BOOK_MAP_DEX
-	db PAL_OW_RED
+	db PAL_OW_BROWN
 
 	; 0x55: SPRITE_CLIPBOARD
 	db PAL_OW_BROWN
@@ -544,10 +559,10 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_BLUE
 
 	; 0x57: SPRITE_OLD_AMBER_COPY
-	db PAL_OW_BROWN
+	db PAL_OW_RED
 
 	; 0x58: SPRITE_OLD_AMBER
-	db PAL_OW_BROWN
+	db PAL_OW_RED
 
 	; 0x59: SPRITE_POKEDEX
 	db PAL_OW_RED
@@ -565,7 +580,7 @@ SpritePaletteAssignments: ; Characters on the overworld
 	db PAL_OW_RED
 
 	; 0x5e: SPRITE_DITTO
-	db PAL_OW_PURPLE
+	db PAL_OW_BLUE
 
 	; 0x5f: SPRITE_CELEBI
 	db PAL_OW_GREEN
@@ -575,6 +590,9 @@ SpritePaletteAssignments: ; Characters on the overworld
 
 	; 0x61: SPRITE_TOWN_MAP
 	db PAL_OW_BLUE
+	
+	; 0x62: SPRITE_BENCH_GUY
+	db PAL_OW_BROWN
 
 
 AnimationTileset1Palettes:

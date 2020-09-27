@@ -58,9 +58,9 @@ _ExclamationText::
 	text "!"
 	done
 
-_GroundRoseText::
-	text "Ground rose up"
-	line "somewhere!"
+_MyReflectionText::
+	text "My reflection!"
+	line "Lookin' good!"
 	done
 
 _BoulderText::
@@ -439,22 +439,6 @@ _RockTunnelPokecenterGuyText::
 	text "I heard that"
 	line "Ghosts haunt"
 	cont "Lavender Town!"
-	done
-
-_UnusedBenchGuyText1::
-	text "I wish I could"
-	line "catch #mon."
-	done
-
-_UnusedBenchGuyText2::
-	text "I'm tired from"
-	line "all the fun..."
-	done
-
-_UnusedBenchGuyText3::
-	text "Silph's manager"
-	line "is hiding in the"
-	cont "Safari Zone."
 	done
 
 _VermilionPokecenterGuyText::
@@ -2575,6 +2559,13 @@ _CableClubNPCAreaReservedFor2FriendsLinkedByCableText::
 _CableClubNPCWelcomeText::
 	text "Welcome to the"
 	line "Cable Club!"
+	
+	para "Unfortunately, the"
+	line "link machine is"
+	cont "broken."
+	
+	para "We're sorry for"
+	line "the inconvenience."
 	done
 
 _CableClubNPCPleaseApplyHereHaveToSaveText::
@@ -2645,7 +2636,7 @@ _WarpToLastPokemonCenterText::
 _CannotUseTeleportNowText::
 	TX_RAM wcd6d
 	text " can't"
-	line "use Telepor now."
+	line "use Teleport now."
 	prompt
 
 _CannotFlyHereText::
@@ -2970,6 +2961,12 @@ _GotOffBicycleText2::
 	text "the @"
 	TX_RAM wcf4b
 	text "."
+	prompt
+
+_NoBicycleText1::
+	text "Pressing SELECT"
+	line "uses the Bicycle"
+	cont "if you have one."
 	prompt
 
 _ThrewAwayItemText::

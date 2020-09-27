@@ -980,10 +980,6 @@ ExclamationText::
 	TX_FAR _ExclamationText
 	db "@"
 
-GroundRoseText::
-	TX_FAR _GroundRoseText
-	db "@"
-
 BoulderText::
 	TX_FAR _BoulderText
 	TX_ASM
@@ -4773,9 +4769,9 @@ const_value = 1
 	add_tx_pre SaffronCityPokecenterBenchGuyText    ; 18
 	add_tx_pre MtMoonPokecenterBenchGuyText         ; 19
 	add_tx_pre RockTunnelPokecenterBenchGuyText     ; 1A
-	add_tx_pre UnusedBenchGuyText1                  ; 1B XXX unused
-	add_tx_pre UnusedBenchGuyText2                  ; 1C XXX unused
-	add_tx_pre UnusedBenchGuyText3                  ; 1D XXX unused
+	add_tx_pre MyReflectionText                     ; 1B
+	add_tx_pre UnusedPokecenterBenchGuyText2        ; 1C XXX unused
+	add_tx_pre UnusedPokecenterBenchGuyText3        ; 1D XXX unused
 	add_tx_pre UnusedPredefText                     ; 1E XXX unused
 	add_tx_pre PokemonCenterPCText                  ; 1F
 	add_tx_pre ViridianSchoolNotebook               ; 20

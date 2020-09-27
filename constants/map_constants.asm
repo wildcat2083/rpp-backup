@@ -9,7 +9,7 @@ ENDM
 	mapconst VIRIDIAN_CITY,              18, 20 ; $01
 	mapconst PEWTER_CITY,                18, 20 ; $02
 	mapconst CERULEAN_CITY,              18, 20 ; $03
-	mapconst LAVENDER_TOWN,               9, 10 ; $04
+	mapconst LAVENDER_TOWN,               9, 12 ; $04
 	mapconst VERMILION_CITY,             18, 20 ; $05
 	mapconst CELADON_CITY,               18, 25 ; $06
 	mapconst FUCHSIA_CITY,               18, 20 ; $07
@@ -24,7 +24,7 @@ ENDM
 	mapconst ROUTE_5,                    18, 10 ; $10
 	mapconst ROUTE_6,                    18, 10 ; $11
 	mapconst ROUTE_7,                     9, 10 ; $12
-	mapconst ROUTE_8,                     9, 30 ; $13
+	mapconst ROUTE_8,                     9, 28 ; $13
 	mapconst ROUTE_9,                     9, 30 ; $14
 	mapconst ROUTE_10,                   36, 10 ; $15
 	mapconst ROUTE_11,                    9, 30 ; $16
@@ -42,9 +42,9 @@ ENDM
 	mapconst ROUTE_23,                   72, 10 ; $22
 	mapconst ROUTE_24,                   18, 10 ; $23
 	mapconst ROUTE_25,                    9, 30 ; $24
-	mapconst REDS_HOUSE_1F,               4,  7 ; $25
+	mapconst REDS_HOUSE_1F,               4,  4 ; $25
 	mapconst REDS_HOUSE_2F,               4,  4 ; $26
-	mapconst BLUES_HOUSE,                 4,  7 ; $27
+	mapconst BLUES_HOUSE,                 4,  4 ; $27
 	mapconst OAKS_LAB,                    6,  5 ; $28
 	mapconst VIRIDIAN_POKECENTER,         4,  7 ; $29
 	mapconst VIRIDIAN_MART,               4,  4 ; $2A
@@ -243,7 +243,7 @@ ENDM
 	mapconst SILPH_CO_11F,                9,  9 ; $EB
 	mapconst SILPH_CO_ELEVATOR,           2,  2 ; $EC
 	mapconst NAVEL_ROCK_HO_OH_ROOM,      14, 14 ; $ED
-	mapconst NAVEL_ROCK_LUGIA_ROOM,      14, 14 ; $EE
+	mapconst NAVEL_ROCK_LUGIA_ROOM,      20, 14 ; $EE
 	mapconst TRADE_CENTER,                4,  5 ; $EF
 	mapconst COLOSSEUM,                   4,  5 ; $F0
 	mapconst UNUSED_MAP_F1,               0,  0 ; $F1

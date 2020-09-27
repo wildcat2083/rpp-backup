@@ -79,7 +79,7 @@ SpriteSets:
 	db SPRITE_HIKER
 	db SPRITE_SLOWBRO
 	db SPRITE_BLUE
-	db SPRITE_GUARD
+	db SPRITE_OFFICER_JENNY
 	db SPRITE_LASS
 	db SPRITE_BLACK_HAIR_BOY_1
 	db SPRITE_BALL
@@ -691,4 +691,7 @@ SpriteSheetPointerTable:
 	db $40 ; byte count
 	db BANK(TownMapSprite)
 
-
+	; SPRITE_BENCH_GUY
+	dw BenchGuySprite
+	db $40 ; byte count
+	db BANK(BenchGuySprite)

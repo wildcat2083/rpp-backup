@@ -33,17 +33,13 @@ _TM34ExplanationText::
 	para "A TM contains a"
 	line "technique that"
 	cont "can be taught to"
-	cont "#mon!"
-
-	para "A TM is good only"
-	line "once! So when you"
-	cont "use one to teach"
-	cont "a new technique,"
-	cont "pick the #mon"
-	cont "carefully!"
+	cont "#mon."
+	
+	para "It can be used"
+	line "again and again!"
 
 	para "TM36 contains"
-	line "Rock Tomb!"
+	line "Rock Tomb."
 
 	para "It reduces your"
 	line "opponent's speed,"
@@ -72,12 +68,16 @@ _PewterGymText_5c4c1::
 	para "That's an official"
 	line "#mon League"
 	cont "Badge!"
-
+IF DEF(_HARD)
+	para "It's your first"
+	line "step on the road"
+	cont "to the League!"
+ELSE
 	para "Its bearer's"
 	line "#mon become"
 	cont "more powerful!"
-
-	para "The technique"
+ENDC
+	para "Also, the move"
 	line "Flash can now be"
 	cont "used anytime!"
 	prompt
@@ -109,7 +109,7 @@ _PewterGymText_5c515::
 	text "Hiya! I can tell"
 	line "you have what it"
 	cont "takes to become a"
-	cont "#moc champ!"
+	cont "#mon champ!"
 
 	para "I'm no trainer,"
 	line "but I can tell"
